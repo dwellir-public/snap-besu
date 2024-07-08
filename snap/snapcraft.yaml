@@ -1,6 +1,6 @@
 name: besu
 title: Besu 
-base: core22
+base: core24
 adopt-info: besu
 summary: Besu - Hyperledger Ethereum client.
 license: GPL-3.0-with-GCC-exception
@@ -11,8 +11,8 @@ website: https://www.dwellir.com
 grade: stable
 confinement: strict
 
-architectures:
-  - amd64
+platforms:
+  amd64:
 
 description: |
   Hyperledger Besu is an Ethereum client designed to be enterprise-friendly for both public and private permissioned network use cases, with an extractable EVM implementation. 
@@ -36,17 +36,14 @@ parts:
       echo "BEGIN BUILD OF BESU - gradlew"
       ./gradlew --no-daemon installDist
       echo "COMPLETED BUILD OF BESU - gradlew"
-      mkdir -p "${CRAFT_PART_INSTALL}"/bin
-      cp build/install/besu/bin/besu ${CRAFT_PART_INSTALL}/bin/besu
-      cp build/install/besu/bin/evmtool ${CRAFT_PART_INSTALL}/bin/evmtool
 
-    stage:
-      - bin/besu
-      - bin/evmtool
-
-    prime:
-      - bin/besu
-      - bin/evmtool
+    override-stage: |
+      printenv
+      mkdir -p "${CRAFT_PRIME}"/bin
+      cp ${CRAFT_PART_BUILD}/build/install/besu/bin/besu ${SNAPCRAFT_PRIME}/bin/besu
+      cp ${CRAFT_PART_BUILD}/build/install/besu/bin/evmtool ${SNAPCRAFT_PRIME}/bin/evmtool
+      cp -r ${CRAFT_PART_BUILD}/build/install/besu/lib ${SNAPCRAFT_PRIME}/
+      craftctl default
 
   wrappers:
     plugin: dump
