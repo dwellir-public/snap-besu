@@ -1,0 +1,78 @@
+name: besu
+title: Besu 
+base: core22
+adopt-info: besu
+summary: Besu - Hyperledger Ethereum client.
+license: GPL-3.0-with-GCC-exception
+contact: info@dwellir.com
+issues: https://github.com/dwellir-public/snap-besu/issues
+source-code: https://github.com/dwellir-public/snap-besu
+website: https://www.dwellir.com
+grade: stable
+confinement: strict
+
+architectures:
+  - amd64
+
+description: |
+  Hyperledger Besu is an Ethereum client designed to be enterprise-friendly for both public and private permissioned network use cases, with an extractable EVM implementation. It can also be run on test networks such as Holesky and Sepolia. Hyperledger Besu includes several consensus algorithms including Proof of Stake, Proof of Work, and Proof of Authority (IBFT 2.0, QBFT, and Clique). Its comprehensive permissioning schemes are designed specifically for use in a consortium environment.
+
+parts:
+  besu:
+    plugin: nil
+#    build-snaps: [gradle/latest/stable]
+    build-packages: 
+      - openjdk-21-jdk-headless
+    source: https://github.com/hyperledger/besu.git
+    source-tag: 24.5.4
+    stage-packages:
+      - openjdk-21-jre-headless
+
+    override-pull: |
+      craftctl default
+      craftctl set version="24.5.4-$(git rev-parse --short HEAD)"
+
+    override-build: |
+      echo "BEGIN BUILD OF BESU"
+      ./gradlew --no-daemon installDist
+      mkdir -p "${CRAFT_PART_INSTALL}"/bin
+      cp build/install/besu/bin/besu ${CRAFT_PART_INSTALL}/bin/besu
+      cp build/install/besu/bin/evmtool ${CRAFT_PART_INSTALL}/bin/evmtool
+
+    stage:
+      - bin/besu
+      - bin/evmtool
+
+    prime:
+      - bin/besu
+      - bin/evmtool
+
+  wrappers:
+    plugin: dump
+    source-type: local
+    source: .
+    stage:
+      - wrappers/
+
+
+  utils:
+    plugin: dump
+    source: .
+    stage:
+      - utils/
+
+
+apps:
+  besu-daemon:
+    command: wrappers/start-besu.bash
+    daemon: simple
+    install-mode: disable
+    refresh-mode: endure
+    restart-condition: never
+    plugs:
+      - network
+      - network-bind
+    environment:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+#      JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64/
