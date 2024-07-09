@@ -73,4 +73,4 @@ apps:
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
-#      JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64/
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64/
