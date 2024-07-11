@@ -38,6 +38,7 @@ parts:
       echo "BEGIN BUILD OF BESU - gradlew"
       
       # Include the -Djava.net.useSystemProxies=true for builds with Canonical launchpad.
+      echo "org.gradle.jvmargs=-Djava.net.useSystemProxies=true" > gradle.properties
       ./gradlew --no-daemon -Djava.net.useSystemProxies=true installDist
       
       echo "COMPLETED BUILD OF BESU - gradlew"
