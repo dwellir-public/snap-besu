@@ -13,11 +13,8 @@ confinement: strict
 
 platforms:
   amd64:
-    build-on: [amd64]
-    build-for: [amd64]
   arm64:
-    build-on: [arm64]
-    build-for: [arm64]
+  armhf:
 
 description: |
   Hyperledger Besu is an Ethereum client designed to be enterprise-friendly for both public and private permissioned network use cases, with an extractable EVM implementation. 
