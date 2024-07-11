@@ -39,7 +39,10 @@ parts:
 
     override-build: |
       echo "BEGIN BUILD OF BESU - gradlew"
-      ./gradlew --no-daemon installDist
+      
+      # Include the -Djava.net.useSystemProxies=true for builds with Canonical launchpad.
+      ./gradlew --no-daemon -Djava.net.useSystemProxies=true installDist
+      
       echo "COMPLETED BUILD OF BESU - gradlew"
 
     override-stage: |
