@@ -7,6 +7,8 @@ get_proxy_options() {
         proxy=$(printenv "${var}_proxy")
 
         if [ -n "$proxy" ]; then
+            # Remove trailing /
+            proxy=$(echo "$proxy" | sed 's|/$||')
             # Extract hostname and port using POSIX-compatible tools
             proto="$(echo $proxy | sed -e's,^\(.*://\).*,\1,g')"
             url=$(echo $proxy | sed -e s,$proto,,g)
