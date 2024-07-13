@@ -40,7 +40,7 @@ default=--base-path=$SNAP_COMMON/besu_base --name=<hostname>
 
 Example:
 
-    sudo snap set besu service-args="--foobar"
+    sudo snap set besu service-args="--network=mainnet"
 
 
 #### endure
