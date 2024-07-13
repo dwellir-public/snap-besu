@@ -22,6 +22,7 @@ description: |
 
 parts:
   besu:
+    after: [utils]
     plugin: nil
     build-packages: 
       - openjdk-21-jdk-headless
@@ -36,10 +37,11 @@ parts:
 
     override-build: |
       echo "BEGIN BUILD OF BESU - gradlew"
-      
+
+      echo "Extracting potential https_proxy and/pr http_proxy as needed when building with Canonical buildfarm"
+      PROXY_OPTS=$($SNAPCRAFT_STAGE/utils/getproxy.sh)
       # Include the -Djava.net.useSystemProxies=true for builds with Canonical launchpad.
-      # echo "org.gradle.jvmargs=-Djava.net.useSystemProxies=true" > gradle.properties
-      GRADLE_OPTS="-Djava.net.useSystemProxies=true" ./gradlew --no-daemon installDist
+      GRADLE_OPTS="-Djava.net.useSystemProxies=true $PROXY_OPTS" ./gradlew --no-daemon installDist
       
       echo "COMPLETED BUILD OF BESU - gradlew"
 
