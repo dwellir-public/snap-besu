@@ -14,7 +14,6 @@ confinement: strict
 platforms:
   amd64:
   arm64:
-  armhf:
 
 description: |
   Hyperledger Besu is an Ethereum client designed to be enterprise-friendly for both public and private permissioned network use cases, with an extractable EVM implementation. 
@@ -30,6 +29,10 @@ parts:
     source-tag: 24.7.0
     stage-packages:
       - openjdk-21-jre-headless
+      # libjemalloc requires $LD_LIBRARY_PATH:$SNAP/usr/lib
+      - libjemalloc-dev
+      # The jna package is needed which also needs -Djna.xxx configs to work.
+      - libjna-java
 
     override-pull: |
       craftctl default
@@ -40,7 +43,6 @@ parts:
 
       echo "Extracting potential https_proxy and/pr http_proxy as needed when building with Canonical buildfarm"
       PROXY_OPTS=$($SNAPCRAFT_STAGE/utils/getproxy.sh)
-      # Include the -Djava.net.useSystemProxies=true for builds with Canonical launchpad.
       GRADLE_OPTS="-Djava.net.useSystemProxies=true $PROXY_OPTS" ./gradlew --no-daemon installDist
       
       echo "COMPLETED BUILD OF BESU - gradlew"
@@ -67,6 +69,9 @@ parts:
     stage:
       - utils/
 
+# Explanation of some configs needed here:
+#   -Djna.library.path => Loads the jmalloc
+#   -Cjna.tmpdir => Is needed to point to a writable location for the snap
 
 apps:
   besu-daemon:
@@ -78,7 +83,25 @@ apps:
     plugs:
       - network
       - network-bind
+      - removable-media
+      - system-observe
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
       JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64/
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
+      JAVA_OPTS: -Djna.library.path=$SNAP/usr/lib/x86_64-linux-gnu/jni/libjnidispatch.system.so -Djna.tmpdir=/tmp
+
+  besu:
+    command: bin/besu
+    plugs:
+      - network
+      - network-bind
+      - system-observe
+      - removable-media
+    environment:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64/
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
+      JAVA_OPTS: -Djna.library.path=$SNAP/usr/lib/x86_64-linux-gnu/jni/libjnidispatch.system.so -Djna.tmpdir=/tmp

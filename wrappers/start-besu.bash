@@ -10,5 +10,5 @@ SERVICE_ARGS=$(<$SERVICE_ARGS_FILE)
 eval "SERVICE_ARGS_ARRAY=($SERVICE_ARGS)"
 
 echo "=> Service arguments: ${SERVICE_ARGS}"
-# Start the service with the specified parameters
+
 exec "${BESU_BINARY_PATH}" "${SERVICE_ARGS_ARRAY[@]}"
