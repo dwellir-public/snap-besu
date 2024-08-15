@@ -26,7 +26,8 @@ parts:
     build-packages: 
       - openjdk-21-jdk-headless
     source: https://github.com/hyperledger/besu.git
-    source-tag: 24.7.0
+    source-tag: 24.7.1
+    source-depth: 1
     stage-packages:
       - openjdk-21-jre-headless
       # libjemalloc requires $LD_LIBRARY_PATH:$SNAP/usr/lib
@@ -36,7 +37,7 @@ parts:
 
     override-pull: |
       craftctl default
-      craftctl set version="24.7.0-$(git rev-parse --short HEAD)"
+      craftctl set version="24.7.1-$(git rev-parse --short HEAD)"
 
     override-build: |
       echo "BEGIN BUILD OF BESU - gradlew"
