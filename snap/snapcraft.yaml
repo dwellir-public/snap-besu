@@ -26,7 +26,7 @@ parts:
     build-packages: 
       - openjdk-21-jdk-headless
     source: https://github.com/hyperledger/besu.git
-    source-tag: 24.8.0
+    source-tag: 24.9.0
     source-depth: 1
     stage-packages:
       - openjdk-21-jre-headless
@@ -37,7 +37,7 @@ parts:
 
     override-pull: |
       craftctl default
-      craftctl set version="24.8.0-$(git rev-parse --short HEAD)"
+      craftctl set version="24.9.0-$(git rev-parse --short HEAD)"
 
     override-build: |
       echo "BEGIN BUILD OF BESU - gradlew"
