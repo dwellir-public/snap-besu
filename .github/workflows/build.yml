@@ -28,8 +28,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Install Snapcraft
-        uses: samuelmeuli/action-snapcraft@v2
-
-      # Runs a set of commands using the runners shell
-      - name: Use Snapcraft
-        run: snapcraft pack --debug --verbosity=debug
+        uses: snapcore/action-build@v1
