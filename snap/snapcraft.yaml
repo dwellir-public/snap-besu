@@ -26,7 +26,7 @@ parts:
     build-packages: 
       - openjdk-21-jdk-headless
     source: https://github.com/hyperledger/besu.git
-    source-tag: 24.9.1
+    source-tag: 24.10.0
     source-depth: 1
     stage-packages:
       - openjdk-21-jre-headless
