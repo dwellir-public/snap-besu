@@ -7,7 +7,7 @@ Besu - Hyperledger Ethereum client.
     sudo snap get besu
 
     # Set defaults service-args
-    sudo snap set besu service-args="--network=mainnet --data-path=$SNAP_COMMON/data"
+    sudo snap set besu service-args="--network=mainnet --data-path=$SNAP_COMMON/data --plugin-continue-on-error=true"
 
 ### Set snap not to restart besu after upgrade.
 
