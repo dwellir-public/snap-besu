@@ -24,12 +24,12 @@ parts:
     after: [utils]
     plugin: nil
     build-packages: 
-      - openjdk-21-jdk-headless
+      - openjdk-25-jdk-headless
     source: https://github.com/hyperledger/besu.git
-    source-tag: 25.10.0
+    source-tag: 26.8.0
     source-depth: 1
     stage-packages:
-      - openjdk-21-jre-headless
+      - openjdk-25-jre-headless
       # libjemalloc requires $LD_LIBRARY_PATH:$SNAP/usr/lib
       - libjemalloc-dev
       # The jna package is needed which also needs -Djna.xxx configs to work.
@@ -37,7 +37,7 @@ parts:
 
     override-pull: |
       craftctl default
-      craftctl set version="25.10.0$(git rev-parse --short HEAD)"
+      craftctl set version="26.8.0$(git rev-parse --short HEAD)"
 
     override-build: |
       echo "BEGIN BUILD OF BESU - gradlew"
@@ -89,7 +89,7 @@ apps:
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64/
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-25-openjdk-$SNAP_ARCH/
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
       JAVA_OPTS: -Djna.library.path=$SNAP/usr/lib/x86_64-linux-gnu/jni/libjnidispatch.system.so -Djna.tmpdir=/tmp
 
@@ -103,6 +103,6 @@ apps:
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64/
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-25-openjdk-$SNAP_ARCH/
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
       JAVA_OPTS: -Djna.library.path=$SNAP/usr/lib/x86_64-linux-gnu/jni/libjnidispatch.system.so -Djna.tmpdir=/tmp
