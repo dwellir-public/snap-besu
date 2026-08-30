@@ -33,3 +33,13 @@ The snap supports using differnt data locations. Allowed locations defined by th
 
     # Configure the --data-path to an external location
     sudo snap set besu service-args="--network=mainnet --data-path=/mnt/besu/data"
+
+### Example besu config
+
+This starts a besu ready for use with for example prysm.
+
+The jwt.hex is then located in: /var/snap/besu/common/data/jwt.hex (SNAP_COMMON=/var/snap/besu/common)
+
+```
+sudo snap set besu service-args='--network=mainnet --rpc-http-enabled  --data-path=$SNAP_COMMON/data --engine-jwt-secret=$SNAP_COMMON/data/jwt.hex --engine-host-allowlist="*" --data-storage-format=BONSAI --sync-mode=X_SNAP'
+```
